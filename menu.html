@@ -208,6 +208,8 @@
         <input type="text" id="rpFirstName" required>
         <label for="rpLastName">Příjmení:</label>
         <input type="text" id="rpLastName" required>
+        <label for="discordnick">Discord Nick</label>
+        <input type="text" id="disnick" required>
         <button onclick="submitOrder()">Potvrdit objednávku</button>
     </div>
 </div>
@@ -243,11 +245,12 @@
     async function submitOrder() {
         const firstName = document.getElementById('rpFirstName').value;
         const lastName = document.getElementById('rpLastName').value;
-
+        const discordNick = document.getElementById('disnick').value; // Přidáno: Discord nick
+    
         // Formátování zprávy do embed
         const embed = {
             title: `Nová objednávka #${orderNumber}`,
-            description: `**Jméno:** ${firstName}\n**Příjmení:** ${lastName}\n**Položky v košíku:**`,
+            description: `**Jméno:** ${firstName}\n**Příjmení:** ${lastName}\n**Discord Nick:** ${discordNick}\n**Položky v košíku:**`, // Přidáno: Discord nick
             fields: cart.map(item => ({
                 name: item.name,
                 value: `${item.price} €`,
@@ -255,13 +258,13 @@
             })),
             color: 5814783 // Barva embed
         };
-
+    
         const response = await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ embeds: [embed] })
         });
-
+    
         if (response.ok) {
             alert('Objednávka byla úspěšně odeslána!');
             cart = []; // Vyprázdnění košíku
